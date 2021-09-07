@@ -14,10 +14,10 @@ const logger = createLogger({
   ),
   defaultMeta: { service: 'user-service' },
   transports: [
-    new transports.File({ filename: 'error.log', level: 'error' }),
-    new transports.File({ filename: 'info.log', level: 'info' }),
-    new transports.File({ filename: 'status.log', level: 'status' }),
-    new transports.File({ filename: 'combined.log' }),
+    new transports.File({ filename: 'logger/logData/error.log', level: 'error' }),
+    new transports.File({ filename: 'logger/logData/info.log', level: 'info' }),
+    new transports.File({ filename: 'logger/logData/status.log', level: 'status' }),
+    new transports.File({ filename: 'logger/logData/combined.log' }),
   ],
 });
 

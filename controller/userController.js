@@ -12,21 +12,25 @@ const log = require("../logger/loggerFunction")
 
 
 let userControls = {
-    async getUserByEmail(request, response, next){
-        let user
-
-        //checks if same email is present in db or not
+    //get all data
+    async getUserData(request, response){
+        let users
         try{
-            user = await userData.find({email:request.body.email})
-        } catch (err) {
-            return res.status(500).json({ message:err.message })
+            users = await userData.find()
+            if(users){
+                log.info("GETTING DATA - TEST DONE")
+                return response.status(200).send(users)
+            }else{
+                log.error("NO DATA")
+                return response.status(404).send(users)
+            }
+        }catch(err){
+            log.error("SERVER SIDE ERROR", err)
+            response.status(500).send({message: err.message})
         }
-
-        //if false, this would be empty
-        response.user = user
-        next()
     },
 
+    //login
     async findUserByCredentials(request, response, next){
         let user
         try{
@@ -43,6 +47,7 @@ let userControls = {
         }
     },
     
+    //signup
     async signUpUser(request, response){
         
         const user = new userData({
@@ -51,7 +56,7 @@ let userControls = {
             email: request.body.email,
             password: request.body.password
         })
-        
+
         console.log(user)
 
         if(response.user.length != 0){
@@ -68,6 +73,21 @@ let userControls = {
                 response.status(400).json({ message: err.message })
             }
         }
+    },
+
+    async getUserByEmail(request, response, next){
+        let user
+
+        //checks if same email is present in db or not
+        try{
+            user = await userData.find({email:request.body.email})
+        } catch (err) {
+            return res.status(500).json({ message:err.message })
+        }
+
+        //if false, this would be empty
+        response.user = user
+        next()
     },
 
     validateUser(request, response, next){

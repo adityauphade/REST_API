@@ -33,7 +33,10 @@ app.use(express.json()) //pushed all the received data in request.body
 
 
 const userRouter = require('./routes/userRoute')
-app.use('/userData', userRouter)
+app.use('/NotesApp', userRouter)
+
+const noteRouter = require('./routes/noteRoute')
+app.use('/NotesApp', noteRouter)
 
 
 app.listen("3000", () => {

@@ -1,36 +1,55 @@
 swagger: "2.0"
 info:
-  title: Sample API
-  description: API description in Markdown.
+  title: Notes API
+  description: Swagger for Notes Application.
   version: 1.0.0
+tags:
+- name: "User Actions"
+  description: "Login & Signup actions"
+- name: "Note Actions"
+  description: "Add, Edit & Delete action on Notes"
 paths:
-  /Signin:
+  /Signup:
     post:
-      summary: Returns a list of users.
-      description: Optional extended description in Markdown.
+      tags: [User Actions]
+      summary: Register a new user.
+      parameters: 
+        - in: "body"
+          required: true
+          schema:
+            type: object
+            required: [fname, lname, email, password]
+            properties:
+              fname:
+                type: string
+              lname:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+      description: Register a new user & get that object back.
       produces:
         - application/json
       responses:
         200:
           description: OK
-  /login:
+  /Login:
     get:
+      tags: [User Actions]
       summary: Returns a list of users.
-      description: Optional extended description in Markdown.
       parameters:
         - in: body
-          # name: user
           description: The user to create.
           schema:
             type: object
-            required:
-              - email
-              - password
+            required: [email, password]
             properties:
               email:
                 type: string
               password:
                 type: string
+      description: Login the user & return the Logged in Object.
       produces:
         - application/json
       responses:

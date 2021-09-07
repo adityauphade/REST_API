@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const log = require("../logger/loggerFunction")
 const userControls = require('../controller/userController')
 
@@ -7,12 +8,10 @@ const userControls = require('../controller/userController')
 router.post("/Signup", userControls.validateRules(), userControls.validateUser, userControls.getUserByEmail, userControls.signUpUser)
 
 // Test
-router.get("/", (request, respond) => {
-    respond.send()
-})
+router.get("/UserData", userControls.getUserData)
 
 // login
-router.get("/login/", userControls.findUserByCredentials)
+router.get("/Login", userControls.findUserByCredentials)
 
 
 module.exports = router
