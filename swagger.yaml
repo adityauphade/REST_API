@@ -32,7 +32,7 @@ paths:
   /Login:
     get:
       tags: [User Actions]
-      summary: "Returns a list of users."
+      summary: "Logins into the Application"
       parameters:
         - in: body
           name: "Login User"
@@ -40,6 +40,16 @@ paths:
           schema:
             type: object
             $ref: '#/definitions/login'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /UserData:
+    get:
+      tags: [User Actions]
+      summary: "Returns a list of users."
+      description: "Returns the list of stored Users in the form of Objects."
       produces:
         - application/json
       responses:
@@ -61,7 +71,17 @@ paths:
       responses:
         200:
           description: OK
-  /Note/{id}:
+  /Note:
+    get:
+      tags: [Note Actions]
+      summary: "Returns all the Notes."
+      description: "Returns the list of stored Notes in the form of Objects."
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /Note/Delete/{id}:
     delete:
       tags: [Note Actions]
       summary: "Let's you delete the selected Note"
@@ -76,22 +96,39 @@ paths:
       responses:
         200:
           description: OK
+  /Note/Edit/{id}:
     patch:
       tags: [Note Actions]
       summary: "Let's you edit the selected Note"
       parameters:
         - name: id
           in: path
-          description: 
+          description: ID of the Object
           required: true
           type: string
         - in: body
           name: "Updated Note"
-          description: "Add a note once the user is Logged in the Application"
+          description: "Edit selected note once the user is Logged in the Application"
           schema:
             type: object
             $ref: '#/definitions/note'
       description: Edits the note.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /Note/Archive/{id}:
+    patch:
+      tags: [Note Actions]
+      summary: "Let's you archive the selected Note"
+      parameters:
+        - name: id
+          in: path
+          description: ID of the Object
+          required: true
+          type: string
+      description: Archive the note.
       produces:
         - application/json
       responses:
@@ -126,12 +163,17 @@ definitions:
     properties:
       title:
         type: string
+        example: Note - Title
       body:
         type: string
+        example: Note - Body
       colour:
         type: string
+        example: "#000"
       isArchived:
         type: boolean
+        example: false
       isDeleted:
         type: boolean
+        example: false
 

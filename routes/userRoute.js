@@ -11,7 +11,7 @@ router.post("/Signup", userControls.validateRules(), userControls.validateUser, 
 router.get("/UserData", userControls.getUserData)
 
 // login
-router.get("/Login", userControls.findUserByCredentials)
+router.post("/Login", userControls.findUserByCredentials)
 
 
 module.exports = router

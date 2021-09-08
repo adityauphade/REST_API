@@ -37,9 +37,9 @@ let userControls = {
             user = await userData.findOne({email: request.body.email, password: request.body.password})
             if(!user){
                 log.error("CANNOT FIND USER")
-                return response.status(404).send({message: "USER NOT FOUND"})
+                response.status(404).send({message: "USER NOT FOUND"})
             }else{
-                return response.status(200).send(user)
+                response.status(200).send(user)
             }
         }catch(err){
             log.error("SERVER SIDE ERROR", err)
