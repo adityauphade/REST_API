@@ -1,34 +1,29 @@
 swagger: "2.0"
 info:
-  title: Notes API
-  description: Swagger for Notes Application.
+  title: "Notes API"
+  description: "Swagger for Notes Application."
   version: 1.0.0
+host: "localhost:3000/NotesApp"
+basepath: "/"
 tags:
 - name: "User Actions"
   description: "Login & Signup actions"
 - name: "Note Actions"
   description: "Add, Edit & Delete action on Notes"
+schemes:
+- "http"
 paths:
   /Signup:
     post:
       tags: [User Actions]
-      summary: Register a new user.
+      summary: "Register a new user."
       parameters: 
         - in: "body"
-          required: true
+          name: "New User"
+          description: "Register a new user & get that object back."
           schema:
             type: object
-            required: [fname, lname, email, password]
-            properties:
-              fname:
-                type: string
-              lname:
-                type: string
-              email:
-                type: string
-              password:
-                type: string
-      description: Register a new user & get that object back.
+            $ref: '#/definitions/signup'
       produces:
         - application/json
       responses:
@@ -37,21 +32,106 @@ paths:
   /Login:
     get:
       tags: [User Actions]
-      summary: Returns a list of users.
+      summary: "Returns a list of users."
       parameters:
         - in: body
-          description: The user to create.
+          name: "Login User"
+          description: "Login the user & return the Logged in Object."
           schema:
             type: object
-            required: [email, password]
-            properties:
-              email:
-                type: string
-              password:
-                type: string
-      description: Login the user & return the Logged in Object.
+            $ref: '#/definitions/login'
       produces:
         - application/json
       responses:
         200:
           description: OK
+  /AddNote:
+    post:
+      tags: [Note Actions]
+      summary: "Let's you add a Note"
+      parameters:
+        - in: body
+          name: "New Note"
+          description: "Add a note once the user is Logged in the Application"
+          schema:
+            type: object
+            $ref: '#/definitions/note'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+  /Note/{id}:
+    delete:
+      tags: [Note Actions]
+      summary: "Let's you delete the selected Note"
+      parameters:
+        - name: id
+          in: path
+          description: "Deletes the note."
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    patch:
+      tags: [Note Actions]
+      summary: "Let's you edit the selected Note"
+      parameters:
+        - name: id
+          in: path
+          description: 
+          required: true
+          type: string
+        - in: body
+          name: "Updated Note"
+          description: "Add a note once the user is Logged in the Application"
+          schema:
+            type: object
+            $ref: '#/definitions/note'
+      description: Edits the note.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+definitions:
+  signup:
+    properties:
+      fname:
+        type: string
+        example: "Aditya"
+      lname:
+        type: string
+        example: "Uphade"
+      email:
+        type: string
+        example: "adityauphade@gmail.com"
+      password:
+        type: string
+        example: "Password"
+      required: [fname, lname, email, password]
+  login:
+    properties:
+      email:
+        type: string
+        example: "adityauphade@gmail.com"
+      password:
+        type: string
+        example: "Password"
+    required: [email, password]
+  note:
+    properties:
+      title:
+        type: string
+      body:
+        type: string
+      colour:
+        type: string
+      isArchived:
+        type: boolean
+      isDeleted:
+        type: boolean
+
