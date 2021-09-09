@@ -41,7 +41,7 @@ let noteControls = {
         try{
             await newNote.save()
             log.info("NOTE ADDED")
-            response.status(201).json(newNote)
+            response.status(201).json({ message: "Note Deleted"})
         }catch(err){
             log.error("NOTE NOT ADDED", err)
             response.status(400).json({ message: err.message })
@@ -52,11 +52,11 @@ let noteControls = {
     async EditNote(request, response){
         try{ 
             // await editNote.save()
-            log.info("NOTE ADDED")
+            log.info("NOTE UPDATED")
             const editNote = await noteData.updateMany({_id : request.params.id},{ $set: {...request.body}})
-            response.status(201).json(editNote)
+            response.status(201).json({ message: "Note Updated"})
         }catch(err){
-            log.error("NOTE NOT ADDED", err)
+            log.error("NOTE NOT EDITED", err)
             response.status(400).json({ message: err.message})
         }
     },
@@ -70,7 +70,7 @@ let noteControls = {
                 log.info("NOTE DELETED")
                 response.status(200).send(deleteNote)
             }else{
-                log.error("NOTE NOT FOUND TO BE DELETED")
+                log.error("NOTE NOT FOUND")
             }
         }catch(err){
             log.error("NOTE NOT DELETED", err)

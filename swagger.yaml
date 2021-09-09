@@ -27,10 +27,14 @@ paths:
       produces:
         - application/json
       responses:
-        200:
-          description: OK
+        201:
+          description: Signup Successful
+        422:
+          description: User already exists
+        400:
+          description: Task failed
   /Login:
-    get:
+    post:
       tags: [User Actions]
       summary: "Logins into the Application"
       parameters:
@@ -44,7 +48,11 @@ paths:
         - application/json
       responses:
         200:
-          description: OK
+          description: Login Successful
+        404:
+          description: User not found
+        500:
+          description: Server side error
   /UserData:
     get:
       tags: [User Actions]
@@ -54,7 +62,11 @@ paths:
         - application/json
       responses:
         200:
-          description: OK
+          description: Fetching User Data Successful
+        404:
+          description: Data not found
+        500:
+          description: Task failed
   /AddNote:
     post:
       tags: [Note Actions]
@@ -69,8 +81,10 @@ paths:
       produces:
         - application/json
       responses:
-        200:
-          description: OK
+        201:
+          description: Note Added Successfully
+        400:
+          description: Task Failed
   /Note:
     get:
       tags: [Note Actions]
@@ -80,7 +94,11 @@ paths:
         - application/json
       responses:
         200:
-          description: OK
+          description: Data Fetched
+        404:
+          description: No Data Found
+        500:
+          description: Server side error
   /Note/Delete/{id}:
     delete:
       tags: [Note Actions]
@@ -95,7 +113,9 @@ paths:
         - application/json
       responses:
         200:
-          description: OK
+          description: Note Deleted Successfully
+        400:
+          description: Task failed
   /Note/Edit/{id}:
     patch:
       tags: [Note Actions]
@@ -116,8 +136,10 @@ paths:
       produces:
         - application/json
       responses:
-        200:
-          description: OK
+        201:
+          description: Note Updated Successfully
+        400:
+          description: Task failed
   /Note/Archive/{id}:
     patch:
       tags: [Note Actions]
@@ -133,7 +155,9 @@ paths:
         - application/json
       responses:
         200:
-          description: OK
+          description: Note Archived Successfully
+        400:
+          description: Task failed
 definitions:
   signup:
     properties:
