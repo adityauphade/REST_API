@@ -1,6 +1,8 @@
 const userData = require('../models/userModel')
 const { validationResult, check } = require("express-validator")
 const log = require("../logger/loggerFunction")
+const jwt = require("jsonwebtoken");
+
 
 
 // signup
@@ -39,6 +41,17 @@ let userControls = {
                 log.error("CANNOT FIND USER")
                 response.status(404).send({message: "USER NOT FOUND"})
             }else{
+                //creation of key
+                const token = jwt.sign(
+                    { user_id: user._id, user_email: user.email },
+                    process.env.TOKEN_KEY,
+                    // 'secret',
+                    {
+                      expiresIn: "1000",
+                    }
+                  );
+                user.token = token;
+                log.info("LOGIN SUCCESSFUL")
                 response.status(200).send(user)
             }
         }catch(err){
