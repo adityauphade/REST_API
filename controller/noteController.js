@@ -1,5 +1,4 @@
 const noteData = require('../models/noteModel')
-// const { validationResult, check } = require("express-validator")
 const log = require("../logger/loggerFunction")
 
 //addNote

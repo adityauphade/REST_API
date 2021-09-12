@@ -1,8 +1,6 @@
-const { response } = require("express");
 const jwt = require("jsonwebtoken");
 const log = require("../logger/loggerFunction");
-const config = process.env;
-
+require('dotenv').config()
 
 //function to generate a token => call after logging in 
 // function generateToken(response, request, next) => {
@@ -14,19 +12,18 @@ const config = process.env;
 
 tokenFunctions = {
   async verifyToken(req, res, next){
-    const token =
-      req.body.token || req.query.token || req.headers["x-access-token"];
+    const token = req.header("x-access-token");
   
     if (!token) {
       log.error("TOKEN NOT DEFINED")
       res.status(403).send("A token is required for authentication");
     }
     try {
-      const decoded = jwt.verify(token, config.TOKEN_KEY);
+      await jwt.verify(token, process.env.TOKEN_KEY);
       log.info("TOKEN VERIFIED SUCCESSFULLY")
-      response.send(decoded)
+      // response.send(decoded)
       // req.user = decoded;
-      return next()
+      next()
     } catch (err) {
       log.error("TOKEN IS NOT VALID")
       res.status(401).send("Invalid Token");
