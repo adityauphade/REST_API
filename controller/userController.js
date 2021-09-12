@@ -2,6 +2,8 @@ const userData = require('../models/userModel')
 const { validationResult, check } = require("express-validator")
 const log = require("../logger/loggerFunction")
 const jwt = require("jsonwebtoken");
+require('dotenv').config()
+
 
 
 
@@ -47,7 +49,7 @@ let userControls = {
                     process.env.TOKEN_KEY,
                     // 'secret',
                     {
-                      expiresIn: "1000",
+                      expiresIn: "24h",
                     }
                   );
                 user.token = token;
