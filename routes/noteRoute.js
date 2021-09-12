@@ -8,16 +8,16 @@ const tokenFunctions = require('../util/auth')
 router.get("/Note", tokenFunctions.verifyToken, noteControls.getNote)
 
 // addNote
-router.post("/AddNote", noteControls.addNote)
+router.post("/AddNote", tokenFunctions.verifyToken, noteControls.addNote)
 
 // deleteNote
-router.delete("/Note/Delete/:id", noteControls.DeleteNote)
+router.delete("/Note/Delete/:id", tokenFunctions.verifyToken, noteControls.DeleteNote)
 
 // editNote
-router.patch("/Note/Edit/:id", noteControls.EditNote)
+router.patch("/Note/Edit/:id", tokenFunctions.verifyToken, noteControls.EditNote)
 
 // archiveNote
-router.patch("/Note/Archive/:id", noteControls.ArchiveNote)
+router.patch("/Note/Archive/:id", tokenFunctions.verifyToken, noteControls.ArchiveNote)
 
 
 module.exports = router
