@@ -2,9 +2,8 @@ const userData = require('../models/userModel')
 const { validationResult, check } = require("express-validator")
 const log = require("../logger/loggerFunction")
 const jwt = require("jsonwebtoken");
-const { request } = require('express');
 require('dotenv').config()
-
+var bcrypt = require('bcrypt')
 
 
 
@@ -70,25 +69,26 @@ let userControls = {
     //login
     async findUserByCredentials(request, response, next){
         let user
+        user = await userData.findOne({email: request.body.email})
+        if(!user){
+            log.error("CANNOT FIND USER")
+            response.status(404).json({message: "USER NOT FOUND"})}
         try{
-            user = await userData.findOne({email: request.body.email, password: request.body.password})
-            if(!user){
-                log.error("CANNOT FIND USER")
-                response.status(404).json({message: "USER NOT FOUND"})
-            }else{
-                //creation of key
+            if(await bcrypt.compare(request.body.password, user.password)){
                 const token = jwt.sign(
                     { user_id: user._id, user_email: user.email },
                     process.env.TOKEN_KEY,
-                    // 'secret',
-                    {
-                      expiresIn: "24h",
-                    }
-                  );
+                    {expiresIn: "24h"}
+                );
+                //creation of key
                 user.token = token;
                 log.info("LOGIN SUCCESSFUL")
                 response.status(200).json(user)
+            }else{
+                log.error("PASSWORD INCORRECT", err)
+                response.status(500).json({message: err.message + 'password incorrect'})
             }
+            
         }catch(err){
             log.error("SERVER SIDE ERROR", err)
             response.status(500).json({message: err.message})
@@ -98,11 +98,14 @@ let userControls = {
     //signup
     async signUpUser(request, response){
         
+        //hash pwd
+        const hashedPwd = await bcrypt.hash(request.body.password, 10)
+        //store in db
         const user = new userData({
             fname: request.body.fname,
             lname: request.body.lname,
             email: request.body.email,
-            password: request.body.password
+            password: hashedPwd,
         })
 
         console.log(user)

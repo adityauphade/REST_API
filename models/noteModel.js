@@ -13,6 +13,10 @@ const noteSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    userID: {
+        type: String,
+        required: true,
+    },
     isArchived: {
         type: Boolean,
         required: false,

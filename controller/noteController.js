@@ -33,6 +33,7 @@ let noteControls = {
             title: request.body.title,
             body: request.body.body,
             colour: request.body.colour,
+            userID: request.body.userID,
             isArchived: request.body.isArchived,
             isDeleted: request.body.isDeleted,
         })
