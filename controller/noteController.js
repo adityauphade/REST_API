@@ -92,6 +92,40 @@ let noteControls = {
             log.error("NOTE NOT ARCHIVED", err)
             response.status(400).json({message: err.message})
         }
+    },
+
+    //getArchived
+    async getArchived(req, res){
+        try{
+            let archivedNotes = await noteData.find({isArchived: 'true'})
+            if(archivedNotes){
+                log.info('ARCHIVED NOTES SENT SUCCESSFULLY')
+                res.status(200).json(archivedNotes)
+            }else{
+                log.error('NO ARCHIVED NOTES FOUND')
+                res.status(404).json({message: err.message})
+            }
+        }catch(err){
+            log.error("SERVER SIDE ERROR", err)
+            response.status(400).json({message: err.message})
+        }
+    },
+    
+    //getDeleted
+    async getDeleted(req, res){
+        try{
+            let deletedNotes = await noteData.find({isDeleted: 'true'})
+            if(deletedNotes){
+                log.info('DELETED NOTES SENT SUCCESSFULLY')
+                res.status(200).json(deletedNotes)
+            }else{
+                log.error('NO DELETED NOTES FOUND')
+                res.status(404).json({message: err.message})
+            }
+        }catch(err){
+            log.error("SERVER SIDE ERROR", err)
+            response.status(400).json({message: err.message})
+        }
     }
 }
 
