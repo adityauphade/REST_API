@@ -2,6 +2,7 @@ const userData = require('../models/userModel')
 const { validationResult, check } = require("express-validator")
 const log = require("../logger/loggerFunction")
 const jwt = require("jsonwebtoken");
+const { request } = require('express');
 require('dotenv').config()
 
 
@@ -23,14 +24,46 @@ let userControls = {
             users = await userData.find()
             if(users){
                 log.info("GETTING DATA - TEST DONE")
-                return response.status(200).send(users)
+                return response.status(200).json(users)
             }else{
                 log.error("NO DATA")
-                return response.status(404).send(users)
+                return response.status(404).json(users)
             }
         }catch(err){
             log.error("SERVER SIDE ERROR", err)
-            response.status(500).send({message: err.message})
+            response.status(500).json({message: err.message})
+        }
+    },
+
+    //reset password
+    async ResetPassword(req, res, next){
+        let newPassword
+        try{
+            newPassword = await userData.updateOne({ _id: req.params.id}, { $set: {password: req.body.password}})
+            log.info("PWD UPDATED")
+            res.status(200).json(newPassword)
+        }catch(err){
+            log.error("PWD NOT UPDATED", err)
+            res.status(400).json({message: err.message})
+        }
+    },
+
+    //forgot password
+    async ForgotPassword(req, res, next){
+        let user_email
+        try{
+            user_email = await userData.findOne({email: req.body.email})
+            if(user_email){
+                res.status(200).json({user_email})
+                next()
+            }else{
+                log.error('ENTER EMAIL ID')
+                res.status(404).json({message: "Email ID Required"})
+            }
+        } catch (err) {
+            log.error("SERVER SIDE ERROR", err)
+            res.status(500).json({ message: "HAHAHAHHAHA" })
+            // res.status(500).json({ message: err.message })
         }
     },
 
@@ -41,7 +74,7 @@ let userControls = {
             user = await userData.findOne({email: request.body.email, password: request.body.password})
             if(!user){
                 log.error("CANNOT FIND USER")
-                response.status(404).send({message: "USER NOT FOUND"})
+                response.status(404).json({message: "USER NOT FOUND"})
             }else{
                 //creation of key
                 const token = jwt.sign(
@@ -54,11 +87,11 @@ let userControls = {
                   );
                 user.token = token;
                 log.info("LOGIN SUCCESSFUL")
-                response.status(200).send(user)
+                response.status(200).json(user)
             }
         }catch(err){
             log.error("SERVER SIDE ERROR", err)
-            response.status(500).send({message: err.message})
+            response.status(500).json({message: err.message})
         }
     },
     

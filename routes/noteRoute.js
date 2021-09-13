@@ -4,6 +4,7 @@ const router = express.Router()
 const noteControls = require('../controller/noteController')
 const tokenFunctions = require('../util/auth')
 
+
 //test
 router.get("/Note", tokenFunctions.verifyToken, noteControls.getNote)
 
