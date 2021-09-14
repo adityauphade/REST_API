@@ -21,9 +21,9 @@ router.patch("/Note/Edit/:id", tokenFunctions.verifyToken, noteControls.EditNote
 router.patch("/Note/Archive/:id", tokenFunctions.verifyToken, noteControls.ArchiveNote)
 
 //getALLArchived
-router.get("/Note/Archive", noteControls.getArchived)
+router.get("/Note/Archive", tokenFunctions.verifyToken, noteControls.getArchived)
 
 //getALLDeleted
-router.get("/Note/Trash", noteControls.getDeleted)
+router.get("/Note/Trash", tokenFunctions.verifyToken, noteControls.getDeleted)
 
 module.exports = router

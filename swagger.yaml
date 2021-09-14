@@ -1,3 +1,11 @@
+# 1) Define the security scheme type (HTTP bearer)
+securityDefinitions:
+    BearerAuth:            # arbitrary name for the security scheme
+      type: bearer
+      # scheme: bearer
+      bearerFormat: JWT
+          # optional, arbitrary value for documentation purposes
+
 swagger: "2.0"
 info:
   title: "Notes API"
@@ -10,6 +18,7 @@ tags:
   description: "Login & Signup actions"
 - name: "Note Actions"
   description: "Add, Edit & Delete action on Notes"
+  
 schemes:
 - "http"
 paths:
@@ -67,10 +76,62 @@ paths:
           description: Data not found
         500:
           description: Task failed
+  /ForgotPassword:
+    post:
+      tags: [User Actions]
+      summary: "Sends the Reset Password Request"
+      description: "Verifies the received email & then sends the Reset Password Request"
+      parameters:
+        - name: User Email
+          in: body
+          description: "Email ID who's password the client has forgotten"
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: "adityauphade@gmail.com"
+                required: true
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Email Verified
+        404:
+          description: Email Invalid
+        500:
+          description: Server Side Error
+  # /ResetPassword:
+  #   post:
+  #     tags: [User Actions]
+  #     summary: "Sends the Reset Password Request"
+  #     description: "Verifies the received email & then sends the Reset Password Request"
+  #     parameters:
+  #       - name: User Email
+  #         in: body
+  #         description: "Email ID who's password the client has forgotten"
+  #         schema:
+  #           type: object
+  #           properties:
+  #             email:
+  #               type: string
+  #               example: "adityauphade@gmail.com"
+  #               required: true
+  #     produces:
+  #       - application/json
+  #     responses:
+  #       200:
+  #         description: Email Verified
+  #       404:
+  #         description: Email Invalid
+  #       500:
+  #         description: Server Side Error
   /AddNote:
     post:
       tags: [Note Actions]
       summary: "Let's you add a Note"
+      security:
+        - BearerAuth: []
       parameters:
         - in: body
           name: "New Note"
@@ -89,6 +150,8 @@ paths:
     get:
       tags: [Note Actions]
       summary: "Returns all the Notes."
+      security:
+        - BearerAuth: []
       description: "Returns the list of stored Notes in the form of Objects."
       produces:
         - application/json
@@ -103,6 +166,8 @@ paths:
     delete:
       tags: [Note Actions]
       summary: "Let's you delete the selected Note"
+      security:
+        - BearerAuth: []
       parameters:
         - name: id
           in: path
@@ -120,6 +185,8 @@ paths:
     patch:
       tags: [Note Actions]
       summary: "Let's you edit the selected Note"
+      security:
+        - BearerAuth: []
       parameters:
         - name: id
           in: path
@@ -144,6 +211,8 @@ paths:
     patch:
       tags: [Note Actions]
       summary: "Let's you archive the selected Note"
+      security:
+        - BearerAuth: []
       parameters:
         - name: id
           in: path
@@ -158,6 +227,38 @@ paths:
           description: Note Archived Successfully
         400:
           description: Task failed
+  /Note/Archive:
+    get:
+      tags: [Note Actions]
+      summary: "Returns all the Archived Notes."
+      security:
+        - BearerAuth: []
+      description: "Returns the list of stored Archived Notes in the form of Objects."
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Data Fetched
+        404:
+          description: No Data Found
+        500:
+          description: Server side error
+  /Note/Trash:
+    get:
+      tags: [Note Actions]
+      summary: "Returns all the Deleted Notes."
+      security:
+        - BearerAuth: []
+      description: "Returns the list of deleted Archived Notes in the form of Objects."
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Data Fetched
+        404:
+          description: No Data Found
+        500:
+          description: Server side error
 definitions:
   signup:
     properties:
@@ -200,4 +301,5 @@ definitions:
       isDeleted:
         type: boolean
         example: false
+
 

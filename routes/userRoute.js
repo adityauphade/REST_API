@@ -20,7 +20,7 @@ router.post("/Login", userControls.findUserByCredentials)
 router.post('/ForgotPassword', userControls.ForgotPassword, mailerFunctions.sendMail)
 
 // reset password
-router.post('/ResetPassword/:id', userControls.ResetPassword)
+router.patch('/ResetPassword/:id', userControls.ResetPassword)
 
 
 module.exports = router

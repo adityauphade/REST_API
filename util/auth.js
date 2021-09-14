@@ -12,7 +12,11 @@ require('dotenv').config()
 
 tokenFunctions = {
   async verifyToken(req, res, next){
-    const token = req.header("x-access-token");
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    console.log(authHeader);
+    console.log(token);
+    // const token = req.header("x-access-token");
   
     if (!token) {
       log.error("TOKEN NOT DEFINED")

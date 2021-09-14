@@ -53,16 +53,15 @@ let userControls = {
         try{
             user_email = await userData.findOne({email: req.body.email})
             if(user_email){
-                res.status(200).json({user_email})
+                res.status(200).json({message: 'Email Verified'})
                 next()
             }else{
-                log.error('ENTER EMAIL ID')
-                res.status(404).json({message: "Email ID Required"})
+                log.error('EMAIL ID INVALID')
+                res.status(404).json({message: "Email Invalid"})
             }
         } catch (err) {
             log.error("SERVER SIDE ERROR", err)
-            res.status(500).json({ message: "HAHAHAHHAHA" })
-            // res.status(500).json({ message: err.message })
+            res.status(500).json({ message: err.message })
         }
     },
 
@@ -75,12 +74,12 @@ let userControls = {
             response.status(404).json({message: "USER NOT FOUND"})}
         try{
             if(await bcrypt.compare(request.body.password, user.password)){
+                //creation of token
                 const token = jwt.sign(
                     { user_id: user._id, user_email: user.email },
                     process.env.TOKEN_KEY,
                     {expiresIn: "24h"}
                 );
-                //creation of key
                 user.token = token;
                 log.info("LOGIN SUCCESSFUL")
                 response.status(200).json(user)
@@ -107,7 +106,6 @@ let userControls = {
             email: request.body.email,
             password: hashedPwd,
         })
-
         console.log(user)
 
         if(response.user.length != 0){
