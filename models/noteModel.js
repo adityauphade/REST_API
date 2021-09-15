@@ -15,7 +15,7 @@ const noteSchema = new mongoose.Schema({
     },
     userID: {
         type: String,
-        required: true,
+        required: false,
     },
     isArchived: {
         type: Boolean,

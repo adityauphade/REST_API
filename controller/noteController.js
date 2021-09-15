@@ -41,7 +41,7 @@ let noteControls = {
         try{
             await newNote.save()
             log.info("NOTE ADDED")
-            res.status(201).json({ message: "Note Deleted"})
+            res.status(201).json({ message: "Note Added"})
         }catch(err){
             log.error("NOTE NOT ADDED", err)
             res.status(400).json({ message: err.message })
@@ -68,7 +68,7 @@ let noteControls = {
             deleteNote = await noteData.updateOne({ _id: req.params.id}, { $set: {isDeleted: true}})
             if(deleteNote){
                 log.info("NOTE DELETED")
-                res.status(200).json(deleteNote)
+                res.status(200).json({message: 'Note deleted successfully'})
             }else{
                 log.error("NOTE NOT FOUND")
             }
@@ -84,7 +84,7 @@ let noteControls = {
             archiveNote = await noteData.updateOne({ _id: req.params.id}, { $set: {isArchived: true}})
             if(archiveNote){
                 log.info("NOTE ARCHIVED")
-                res.status(200).json(archiveNote)
+                res.status(200).json({message: 'Note archived successfully'})
             }else{
                 log.error("NOTE NOT FOUND TO BE ARCHIVED")
             }
