@@ -25,7 +25,11 @@ tokenFunctions = {
     try {
       await jwt.verify(token, process.env.TOKEN_KEY);
       log.info("TOKEN VERIFIED SUCCESSFULLY")
+      // console.log(decodeURI(encodedToken))
+      // let decoded = jwt_decode(token);
+      // console.log(decoded)
       // response.send(decoded)
+      // console.log(decoded)
       // req.user = decoded;
       next()
     } catch (err) {

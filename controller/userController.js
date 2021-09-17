@@ -37,8 +37,18 @@ let userControls = {
     //reset password
     async ResetPassword(req, res, next){
         let newPassword
+        let foundID
+        //hash pwd
+       
+        const token = req.params.token
         try{
-            newPassword = await userData.updateOne({ _id: req.params.id}, { $set: {password: req.body.password}})
+            await jwt.verify(token, process.env.TOKEN_KEY,(err, data) => {
+                console.log(data)
+                foundID = data.user_id
+                console.log(data)
+            });
+            const hashedPwd = await bcrypt.hash(req.body.password, 10)
+            newPassword = await userData.updateOne({ _id: foundID}, { $set: {password: hashedPwd}})
             log.info("PWD UPDATED")
             res.status(200).json(newPassword)
         }catch(err){
@@ -49,11 +59,19 @@ let userControls = {
 
     //forgot password
     async ForgotPassword(req, res, next){
-        let user_email
+        let user
         try{
-            user_email = await userData.findOne({email: req.body.email})
-            if(user_email){
-                res.status(200).json({message: 'Email Verified'})
+            user = await userData.findOne({email: req.body.email})
+            if(user){
+                const token = jwt.sign(
+                    { user_id: user._id, user: user.email },
+                    process.env.TOKEN_KEY,
+                    {expiresIn: "24h"}
+                );
+                
+                user.token = token;
+                req.user = user
+                // res.status(200).json(user)
                 next()
             }else{
                 log.error('EMAIL ID INVALID')
@@ -84,8 +102,8 @@ let userControls = {
                 log.info("LOGIN SUCCESSFUL")
                 response.status(200).json(user)
             }else{
-                log.error("PASSWORD INCORRECT", err)
-                response.status(500).json({message: err.message + 'password incorrect'})
+                log.error("PASSWORD INCORRECT")
+                response.status(500).json({message: 'password incorrect'})
             }
             
         }catch(err){
